@@ -17,6 +17,8 @@ function cleanup() {
   unset dbUser
   unset dbName
 
+  unset wpPass
+
   unset themeVersion
 
   unset -f ynInput
@@ -68,6 +70,8 @@ installThemeNeve=$(ynInput "Install Neve Theme" "y")
 
 echo 'Enter Admin Email'
 read -p "Email: " email
+
+echo
 
 echo 'Enter Domain (Do Not include "www" unless using a different subdomain)'
 read -p "Domain: " domain
@@ -164,26 +168,36 @@ sudo sed -r -i "s/^\s*define(\s*'(DB_PASSWORD)',\s*'.*?'\s*);\s*$/define( '\1', 
 sudo sed -r -i "s/^\s*define(\s*'(DB_HOST)',\s*'.*?'\s*);\s*$/define( '\1', 'localhost' );/m" wp-config.php
 
 # setup auth keys
-#pass=$(pwgen -cnysB -r \'\" 64 1)
-sudo sed -r -i "s/^\s*define(\s*'(AUTH_KEY)',\s*'.*?'\s*);\s*$/define( '\1', '$(pwgen -cnysB -r \'\" 64 1)' );/m" wp-config.php
-sudo sed -r -i "s/^\s*define(\s*'(SECURE_AUTH_KEY)',\s*'.*?'\s*);\s*$/define( '\1', '$(pwgen -cnysB -r \'\" 64 1)' );/m" wp-config.php
-sudo sed -r -i "s/^\s*define(\s*'(LOGGED_IN_KEY)',\s*'.*?'\s*);\s*$/define( '\1', '$(pwgen -cnysB -r \'\" 64 1)' );/m" wp-config.php
-sudo sed -r -i "s/^\s*define(\s*'(NONCE_KEY)',\s*'.*?'\s*);\s*$/define( '\1', '$(pwgen -cnysB -r \'\" 64 1)' );/m" wp-config.php
-sudo sed -r -i "s/^\s*define(\s*'(AUTH_SALT)',\s*'.*?'\s*);\s*$/define( '\1', '$(pwgen -cnysB -r \'\" 64 1)' );/m" wp-config.php
-sudo sed -r -i "s/^\s*define(\s*'(SECURE_AUTH_SALT)',\s*'.*?'\s*);\s*$/define( '\1', '$(pwgen -cnysB -r \'\" 64 1)' );/m" wp-config.php
-sudo sed -r -i "s/^\s*define(\s*'(LOGGED_IN_SALT)',\s*'.*?'\s*);\s*$/define( '\1', '$(pwgen -cnysB -r \'\" 64 1)' );/m" wp-config.php
-sudo sed -r -i "s/^\s*define(\s*'(NONCE_SALT)',\s*'.*?'\s*);\s*$/define( '\1', '$(pwgen -cnysB -r \'\" 64 1)' );/m" wp-config.php
+wpPass=$(pwgen -cnysB -r \'\" 64 1)
+sudo sed -r -i "s/^\s*define(\s*'(AUTH_KEY)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+wpPass=$(pwgen -cnysB -r \'\" 64 1)
+sudo sed -r -i "s/^\s*define(\s*'(SECURE_AUTH_KEY)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+wpPass=$(pwgen -cnysB -r \'\" 64 1)
+sudo sed -r -i "s/^\s*define(\s*'(LOGGED_IN_KEY)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+wpPass=$(pwgen -cnysB -r \'\" 64 1)
+sudo sed -r -i "s/^\s*define(\s*'(NONCE_KEY)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+wpPass=$(pwgen -cnysB -r \'\" 64 1)
+sudo sed -r -i "s/^\s*define(\s*'(AUTH_SALT)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+wpPass=$(pwgen -cnysB -r \'\" 64 1)
+sudo sed -r -i "s/^\s*define(\s*'(SECURE_AUTH_SALT)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+wpPass=$(pwgen -cnysB -r \'\" 64 1)
+sudo sed -r -i "s/^\s*define(\s*'(LOGGED_IN_SALT)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+wpPass=$(pwgen -cnysB -r \'\" 64 1)
+sudo sed -r -i "s/^\s*define(\s*'(NONCE_SALT)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+unset wpPass
 
 
 cd wp-content/plugins
 
 function installPlugin() {
-  sudo mkdir "$1"
+  echo "Installing Plugin $1..."
+  sudo mkdir "$1" &>/dev/null
   cd "$1"
-  sudo wget -r --no-parent "https://plugins.svn.wordpress.org/$1/trunk/"
-  sudo cp -r "plugins.svn.wordpress.org/$1/trunk/*" .
-  sudo rm -rf plugins.svn.wordpress.org
+  sudo wget -r --no-parent "https://plugins.svn.wordpress.org/$1/trunk/" &>/dev/null
+  sudo cp -r "plugins.svn.wordpress.org/$1/trunk/*" . &>/dev/null
+  sudo rm -rf plugins.svn.wordpress.org &>/dev/null
   cd ..
+  echo "Finished Installing Plugin $1"
 }
 
 sudo git clone https://github.com/d0n601/All-In-One-WP-Migration-With-Import.git
@@ -221,22 +235,28 @@ if [[ "$installPluginOther" == "true" ]]; then
   installPlugin "progressive-wp"
   installPlugin "aspiesoft-auto-embed"
 
-  wget https://raw.githubusercontent.com/AspieSoft/wp-nginx-setup/master/wp-stateless.zip
-  sudo unzip wp-stateless.zip
-  sudo rm -f wp-stateless.zip
+  echo "Installing Plugin wp-stateless..."
+  wget https://raw.githubusercontent.com/AspieSoft/wp-nginx-setup/master/wp-stateless.zip &>/dev/null
+  sudo unzip wp-stateless.zip &>/dev/null
+  sudo rm -f wp-stateless.zip &>/dev/null
+  echo "Finished Installing Plugin wp-stateless"
 fi
 
 if [[ "$installThemeNeve" == "true" ]]; then
   themeVersion="3.2.5"
 
-  sudo mkdir ../themes/neve
+  echo "Installing Theme neve..."
+  sudo mkdir ../themes/neve &>/dev/null
   cd ../themes/neve
-  sudo wget -r --no-parent "https://themes.svn.wordpress.org/neve/$themeVersion/"
-  sudo cp -r "themes.svn.wordpress.org/neve/$themeVersion/*" .
-  sudo rm -rf themes.svn.wordpress.org
+  sudo wget -r --no-parent "https://themes.svn.wordpress.org/neve/$themeVersion/" &>/dev/null
+  sudo cp -r "themes.svn.wordpress.org/neve/$themeVersion/*" . &>/dev/null
+  sudo rm -rf themes.svn.wordpress.org &>/dev/null
   cd ../../plugins
+  echo "Finished Installing Theme neve"
 
-  wget https://raw.githubusercontent.com/AspieSoft/wp-css-modifications-for-neve/master/css-modifications-for-neve.zip
-  sudo unzip css-modifications-for-neve.zip
-  sudo rm -f css-modifications-for-neve.zip
+  echo "Installing Plugin css-modifications-for-neve..."
+  wget https://raw.githubusercontent.com/AspieSoft/wp-css-modifications-for-neve/master/css-modifications-for-neve.zip &>/dev/null
+  sudo unzip css-modifications-for-neve.zip &>/dev/null
+  sudo rm -f css-modifications-for-neve.zip &>/dev/null
+  echo "Finished Installing Plugin css-modifications-for-neve"
 fi
