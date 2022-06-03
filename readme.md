@@ -1,4 +1,4 @@
-# displayName
+# WordPress NginX Website Setup
 
 [![donation link](https://img.shields.io/badge/buy%20me%20a%20coffee-square-blue)](https://buymeacoffee.aspiesoft.com)
 
