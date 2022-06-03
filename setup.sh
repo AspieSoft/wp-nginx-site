@@ -87,6 +87,9 @@ sudo apt -y upgrade
 # install zip
 sudo apt -y install zip unzip gzip
 
+# install git
+sudo apt -y install git
+
 # install nginx
 sudo apt -y install nginx
 
