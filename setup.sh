@@ -161,29 +161,29 @@ sudo chmod -R 755 *
 sudo cp wp-config-sample.php wp-config.php
 
 # setup db
-sudo sed -r -i "s/^\s*define(\s*'(DB_NAME)',\s*'.*?'\s*);\s*$/define( '\1', '${dbName}_db' );/m" wp-config.php
-sudo sed -r -i "s/^\s*define(\s*'(DB_USER)',\s*'.*?'\s*);\s*$/define( '\1', '${dbUser}' );/m" wp-config.php
-sudo sed -r -i "s/^\s*define(\s*'(DB_PASSWORD)',\s*'.*?'\s*);\s*$/define( '\1', '${dbUserPass}' );/m" wp-config.php
+sudo sed -r -i "s/^\s*define\(\s*'(DB_NAME)',\s*'.*?'\s*\);\s*$/define( '\1', '${dbName}_db' );/m" wp-config.php
+sudo sed -r -i "s/^\s*define\(\s*'(DB_USER)',\s*'.*?'\s*\);\s*$/define( '\1', '${dbUser}' );/m" wp-config.php
+sudo sed -r -i "s/^\s*define\(\s*'(DB_PASSWORD)',\s*'.*?'\s*\);\s*$/define( '\1', '${dbUserPass}' );/m" wp-config.php
 
-sudo sed -r -i "s/^\s*define(\s*'(DB_HOST)',\s*'.*?'\s*);\s*$/define( '\1', 'localhost' );/m" wp-config.php
+sudo sed -r -i "s/^\s*define\(\s*'(DB_HOST)',\s*'.*?'\s*\);\s*$/define( '\1', 'localhost' );/m" wp-config.php
 
 # setup auth keys
 wpPass=$(pwgen -cnysB -r \'\" 64 1)
-sudo sed -r -i "s/^\s*define(\s*'(AUTH_KEY)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+sudo sed -r -i "s/^\s*define\(\s*'(AUTH_KEY)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
 wpPass=$(pwgen -cnysB -r \'\" 64 1)
-sudo sed -r -i "s/^\s*define(\s*'(SECURE_AUTH_KEY)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+sudo sed -r -i "s/^\s*define\(\s*'(SECURE_AUTH_KEY)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
 wpPass=$(pwgen -cnysB -r \'\" 64 1)
-sudo sed -r -i "s/^\s*define(\s*'(LOGGED_IN_KEY)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+sudo sed -r -i "s/^\s*define\(\s*'(LOGGED_IN_KEY)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
 wpPass=$(pwgen -cnysB -r \'\" 64 1)
-sudo sed -r -i "s/^\s*define(\s*'(NONCE_KEY)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+sudo sed -r -i "s/^\s*define\(\s*'(NONCE_KEY)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
 wpPass=$(pwgen -cnysB -r \'\" 64 1)
-sudo sed -r -i "s/^\s*define(\s*'(AUTH_SALT)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+sudo sed -r -i "s/^\s*define\(\s*'(AUTH_SALT)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
 wpPass=$(pwgen -cnysB -r \'\" 64 1)
-sudo sed -r -i "s/^\s*define(\s*'(SECURE_AUTH_SALT)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+sudo sed -r -i "s/^\s*define\(\s*'(SECURE_AUTH_SALT)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
 wpPass=$(pwgen -cnysB -r \'\" 64 1)
-sudo sed -r -i "s/^\s*define(\s*'(LOGGED_IN_SALT)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+sudo sed -r -i "s/^\s*define\(\s*'(LOGGED_IN_SALT)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
 wpPass=$(pwgen -cnysB -r \'\" 64 1)
-sudo sed -r -i "s/^\s*define(\s*'(NONCE_SALT)',\s*'.*?'\s*);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
+sudo sed -r -i "s/^\s*define\(\s*'(NONCE_SALT)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
 unset wpPass
 
 
