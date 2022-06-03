@@ -145,7 +145,7 @@ echo "use mysql; CREATE DATABASE ${dbName}_db; GRANT ALL ON wordpress_db.* TO '$
 cd /var/www/html
 sudo rm -f index.nginx-debian.html
 sudo wget https://wordpress.org/latest.zip
-unzip latest.zip
+sudo unzip latest.zip
 sudo cp -r wordpress/* .
 sudo rm -rf wordpress
 sudo rm -f latest.zip
@@ -186,7 +186,7 @@ function installPlugin() {
   cd ..
 }
 
-git clone https://github.com/d0n601/All-In-One-WP-Migration-With-Import.git
+sudo git clone https://github.com/d0n601/All-In-One-WP-Migration-With-Import.git
 
 if [[ "$installPluginEssentials" == "true" ]]; then
   installPlugin "wordfence"
@@ -222,7 +222,7 @@ if [[ "$installPluginOther" == "true" ]]; then
   installPlugin "aspiesoft-auto-embed"
 
   wget https://raw.githubusercontent.com/AspieSoft/wp-nginx-setup/master/wp-stateless.zip
-  unzip wp-stateless.zip
+  sudo unzip wp-stateless.zip
   sudo rm -f wp-stateless.zip
 fi
 
@@ -237,6 +237,6 @@ if [[ "$installThemeNeve" == "true" ]]; then
   cd ../../plugins
 
   wget https://raw.githubusercontent.com/AspieSoft/wp-css-modifications-for-neve/master/css-modifications-for-neve.zip
-  unzip css-modifications-for-neve.zip
+  sudo unzip css-modifications-for-neve.zip
   sudo rm -f css-modifications-for-neve.zip
 fi
