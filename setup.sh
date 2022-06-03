@@ -136,7 +136,7 @@ dbName=$(pwgen -A0B 8 1)
 # install database
 sudo apt -y install mariadb-server
 sudo systemctl enable mariadb.service
-echo "& y y $dbRootPass $dbRootPass y y y y" | sudo mysql_secure_installation
+echo -e "\ny\ny\n$dbRootPass\n$dbRootPass\ny\ny\ny\ny\n" | sudo mysql_secure_installation
 
 echo "use mysql; CREATE DATABASE ${dbName}_db; GRANT ALL ON wordpress_db.* TO '$dbUser'@'localhost' IDENTIFIED BY '$dbUserPass' WITH GRANT OPTION; FLUSH PRIVILEGES; exit" | mysql -u root -p "$dbRootPass"
 
