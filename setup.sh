@@ -101,9 +101,9 @@ sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 
 if [[ "$subdomain" == "" ]]; then
-  sudo certbot certonly --nginx -m "$email" -d "$domain" -n
+  sudo certbot certonly --nginx -m "$email" -d "$domain" -n --agree-tos
 else
-  sudo certbot certonly --nginx -m "$email" -d "$domain $subdomain" -n
+  sudo certbot certonly --nginx -m "$email" -d "$domain $subdomain" -n --agree-tos
 fi
 sudo certbot renew --dry-run
 
