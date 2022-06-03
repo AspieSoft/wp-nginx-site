@@ -138,7 +138,7 @@ sudo apt -y install mariadb-server
 sudo systemctl enable mariadb.service
 echo -e "\ny\ny\n$dbRootPass\n$dbRootPass\ny\ny\ny\ny\n" | sudo mysql_secure_installation
 
-echo "use mysql; CREATE DATABASE ${dbName}_db; GRANT ALL ON wordpress_db.* TO '$dbUser'@'localhost' IDENTIFIED BY '$dbUserPass' WITH GRANT OPTION; FLUSH PRIVILEGES; exit" | mysql -u root -p "$dbRootPass"
+echo "use mysql; CREATE DATABASE ${dbName}_db; GRANT ALL ON wordpress_db.* TO '$dbUser'@'localhost' IDENTIFIED BY '$dbUserPass' WITH GRANT OPTION; FLUSH PRIVILEGES; exit" | mysql -u root -p$dbRootPass
 
 
 # install wordpress
@@ -155,7 +155,6 @@ sudo chmod -R 755 *
 
 # setup database
 sudo cp wp-config-sample.php wp-config.php
-sudo nano wp-config.php
 
 # setup db
 sudo sed -r -i "s/^\s*define(\s*'(DB_NAME)',\s*'.*?'\s*);\s*$/define( '\1', '${dbName}_db' );/m" wp-config.php
@@ -232,8 +231,8 @@ if [[ "$installThemeNeve" == "true" ]]; then
 
   sudo mkdir ../themes/neve
   cd ../themes/neve
-  sudo wget -r --no-parent "https://themes.svn.wordpress.org/neve/$neveVersion/"
-  sudo cp -r "themes.svn.wordpress.org/neve/$neveVersion/*" .
+  sudo wget -r --no-parent "https://themes.svn.wordpress.org/neve/$themeVersion/"
+  sudo cp -r "themes.svn.wordpress.org/neve/$themeVersion/*" .
   sudo rm -rf themes.svn.wordpress.org
   cd ../../plugins
 
