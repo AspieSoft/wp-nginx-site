@@ -13,5 +13,5 @@ This module will also install a [modified version of wp-migration](https://githu
 ## Installation
 
 ```shell script
-bash <(curl -s https://raw.githubusercontent.com/AspieSoft/wp-nginx-setup/master/setup.sh)
+bash <(curl -s https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/setup.sh)
 ```
