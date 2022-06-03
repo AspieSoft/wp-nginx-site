@@ -114,10 +114,12 @@ sudo certbot renew --dry-run
 
 # config nginx
 cd /etc/nginx/sites-available
-wget -O default https://raw.githubusercontent.com/AspieSoft/wp-nginx-setup/master/nginx-wp-config
+sudo wget -O default https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/nginx-wp-config
 
 sudo sed -r -i "s/DOMAIN/$domain/" default
 sudo sed -r -i "s/SUB/$sub/" default
+
+sudo service nginx restart
 
 
 # install php 8
@@ -131,10 +133,10 @@ sudo apt -y install php8.1-bcmath php8.1-dba php8.1-dom php8.1-enchant php8.1-fi
 
 # gen rand passwords
 sudo apt -y install pwgen
-dbRootPass=$(pwgen -cnys 64 1)
-dbUserPass=$(pwgen -cnys 32 1)
-dbUser=$(pwgen -A0B 8 1)
-dbName=$(pwgen -A0B 8 1)
+dbRootPass="$(pwgen -cnys -r \'\"\`\$\\ 256 1)"
+dbUserPass="$(pwgen -cnys -r \'\"\`\$\\ 64 1)"
+dbUser="$(pwgen -A0B 8 1)"
+dbName="$(pwgen -A0B 8 1)"
 
 
 # install database
@@ -168,21 +170,21 @@ sudo sed -r -i "s/^\s*define\(\s*'(DB_PASSWORD)',\s*'.*?'\s*\);\s*$/define( '\1'
 sudo sed -r -i "s/^\s*define\(\s*'(DB_HOST)',\s*'.*?'\s*\);\s*$/define( '\1', 'localhost' );/m" wp-config.php
 
 # setup auth keys
-wpPass=$(pwgen -cnysB -r \'\" 64 1)
+wpPass="$(pwgen -cnysB -r \'\"\`\$\\ 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(AUTH_KEY)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
-wpPass=$(pwgen -cnysB -r \'\" 64 1)
+wpPass="$(pwgen -cnysB -r \'\"\`\$\\ 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(SECURE_AUTH_KEY)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
-wpPass=$(pwgen -cnysB -r \'\" 64 1)
+wpPass="$(pwgen -cnysB -r \'\"\`\$\\ 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(LOGGED_IN_KEY)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
-wpPass=$(pwgen -cnysB -r \'\" 64 1)
+wpPass="$(pwgen -cnysB -r \'\"\`\$\\ 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(NONCE_KEY)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
-wpPass=$(pwgen -cnysB -r \'\" 64 1)
+wpPass="$(pwgen -cnysB -r \'\"\`\$\\ 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(AUTH_SALT)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
-wpPass=$(pwgen -cnysB -r \'\" 64 1)
+wpPass="$(pwgen -cnysB -r \'\"\`\$\\ 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(SECURE_AUTH_SALT)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
-wpPass=$(pwgen -cnysB -r \'\" 64 1)
+wpPass="$(pwgen -cnysB -r \'\"\`\$\\ 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(LOGGED_IN_SALT)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
-wpPass=$(pwgen -cnysB -r \'\" 64 1)
+wpPass="$(pwgen -cnysB -r \'\"\`\$\\ 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(NONCE_SALT)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
 unset wpPass
 
@@ -236,7 +238,7 @@ if [[ "$installPluginOther" == "true" ]]; then
   installPlugin "aspiesoft-auto-embed"
 
   echo "Installing Plugin wp-stateless..."
-  wget https://raw.githubusercontent.com/AspieSoft/wp-nginx-setup/master/wp-stateless.zip &>/dev/null
+  sudo wget https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/wp-stateless.zip &>/dev/null
   sudo unzip wp-stateless.zip &>/dev/null
   sudo rm -f wp-stateless.zip &>/dev/null
   echo "Finished Installing Plugin wp-stateless"
@@ -255,7 +257,7 @@ if [[ "$installThemeNeve" == "true" ]]; then
   echo "Finished Installing Theme neve"
 
   echo "Installing Plugin css-modifications-for-neve..."
-  wget https://raw.githubusercontent.com/AspieSoft/wp-css-modifications-for-neve/master/css-modifications-for-neve.zip &>/dev/null
+  sudo wget https://raw.githubusercontent.com/AspieSoft/wp-css-modifications-for-neve/master/css-modifications-for-neve.zip &>/dev/null
   sudo unzip css-modifications-for-neve.zip &>/dev/null
   sudo rm -f css-modifications-for-neve.zip &>/dev/null
   echo "Finished Installing Plugin css-modifications-for-neve"
