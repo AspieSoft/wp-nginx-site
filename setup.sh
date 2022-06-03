@@ -184,6 +184,8 @@ function installPlugin() {
   cd ..
 }
 
+git clone https://github.com/d0n601/All-In-One-WP-Migration-With-Import.git
+
 if [[ "$installPluginEssentials" == "true" ]]; then
   installPlugin "wordfence"
   installPlugin "aryo-activity-log"
