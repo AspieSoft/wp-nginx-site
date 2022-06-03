@@ -8,6 +8,8 @@ Optionally auto install some recommended wordpress plugins.
 
 > Note: If using CloudFlare, you may need to go to **SSL/TLS > Edge Certificates** and temporarily disable **Always Use HTTPS**, **Automatic HTTPS Rewrites**, and **Disable Universal SSL** so letsencrypt certbot can detect your domain.
 
+This module will also install a [modified version of wp-migration](https://github.com/d0n601/All-In-One-WP-Migration-With-Import.git) from github
+
 ## Installation
 
 ```shell script
