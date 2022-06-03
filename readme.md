@@ -6,6 +6,8 @@ Easily and quick setup for a wordpress website runing with nginx on debian.
 Auto sets up lets encrypt.
 Optionally auto install some recommended wordpress plugins.
 
+> Note: If using CloudFlare, you may need to go to **SSL/TLS > Edge Certificates** and temporarily disable **Always Use HTTPS**, **Automatic HTTPS Rewrites**, and **Disable Universal SSL** so letsencrypt certbot can detect your domain.
+
 ## Installation
 
 ```shell script
