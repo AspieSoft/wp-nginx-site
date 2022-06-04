@@ -257,18 +257,19 @@ if [[ "$installPluginOther" == "true" ]]; then
   installPlugin "font-awesome"
   installPlugin "rocket-lazy-load"
   installPlugin "login-security-recaptcha"
-  installPlugin "menu-icons"
+  installPlugin "wp-stateless"
   installPlugin "progressive-wp"
+  installPlugin "menu-icons"
   installPlugin "aspiesoft-auto-embed"
 
-  echo "Installing Plugin wp-stateless..."
-  sudo mkdir wp-stateless &>/dev/null
-  cd wp-stateless
-  sudo wget https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/wp-stateless.zip &>/dev/null
-  sudo unzip wp-stateless.zip &>/dev/null
-  sudo rm -f wp-stateless.zip &>/dev/null
-  cd ..
-  echo "Finished Installing Plugin wp-stateless"
+  # echo "Installing Plugin wp-stateless..."
+  # sudo mkdir wp-stateless &>/dev/null
+  # cd wp-stateless
+  # sudo wget https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/wp-stateless.zip &>/dev/null
+  # sudo unzip wp-stateless.zip &>/dev/null
+  # sudo rm -f wp-stateless.zip &>/dev/null
+  # cd ..
+  # echo "Finished Installing Plugin wp-stateless"
 fi
 
 if [[ "$installThemeNeve" == "true" ]]; then
@@ -292,6 +293,9 @@ if [[ "$installThemeNeve" == "true" ]]; then
   cd ..
   echo "Finished Installing Plugin css-modifications-for-neve"
 fi
+
+sudo chown -R www-data:www-data /var/www/html
+sudo chmod -R 755 /var/www/html
 
 
 # finished msg
