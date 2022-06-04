@@ -64,7 +64,7 @@ function installPlugin() {
   sudo mkdir "$1" &>/dev/null
   cd "$1"
   sudo wget -r --no-parent "https://plugins.svn.wordpress.org/$1/trunk/" &>/dev/null
-  sudo cp -r "plugins.svn.wordpress.org/$1/trunk/*" . &>/dev/null
+  sudo cp -r plugins.svn.wordpress.org/$1/trunk/* . &>/dev/null
   sudo rm -rf plugins.svn.wordpress.org &>/dev/null
   cd ..
   echo "Finished Installing Plugin $1"
@@ -122,7 +122,7 @@ if [[ "$installThemeNeve" == "true" ]]; then
   sudo mkdir ../themes/neve &>/dev/null
   cd ../themes/neve
   sudo wget -r --no-parent "https://themes.svn.wordpress.org/neve/$themeVersion/" &>/dev/null
-  sudo cp -r "themes.svn.wordpress.org/neve/$themeVersion/*" . &>/dev/null
+  sudo cp -r themes.svn.wordpress.org/neve/$themeVersion/* . &>/dev/null
   sudo rm -rf themes.svn.wordpress.org &>/dev/null
   cd ../../plugins
   echo "Finished Installing Theme neve"
