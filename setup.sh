@@ -262,3 +262,14 @@ if [[ "$installThemeNeve" == "true" ]]; then
   sudo rm -f css-modifications-for-neve.zip &>/dev/null
   echo "Finished Installing Plugin css-modifications-for-neve"
 fi
+
+
+# finished msg
+echo "All Done!"
+echo
+
+if [[ "$subdomain" == "" ]]; then
+  echo "Open https://$domain in a browser to get started"
+else
+  echo "Open https://$subdomain in a browser to get started"
+fi

@@ -37,3 +37,14 @@ sudo sed -r -i "s/DOMAIN/$domain/" default
 sudo sed -r -i "s/SUB/$sub/" default
 
 sudo service nginx restart
+
+
+# finished msg
+echo "All Done!"
+echo
+
+if [[ "$subdomain" == "" ]]; then
+  echo "Open https://$domain in a browser to get started"
+else
+  echo "Open https://$subdomain in a browser to get started"
+fi
