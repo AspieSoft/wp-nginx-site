@@ -92,7 +92,7 @@ sudo apt -y upgrade
 sudo apt -y install zip unzip gzip
 
 # install git
-sudo apt -y install git
+sudo apt -y install git wget curl
 
 # install nginx
 sudo apt -y install nginx
@@ -133,8 +133,9 @@ sudo apt -y install php8.1-bcmath php8.1-dba php8.1-dom php8.1-enchant php8.1-fi
 
 # gen rand passwords
 sudo apt -y install pwgen
-dbRootPass="$(pwgen -cnys -r \'\"\`\$\\\/ 256 1)"
-dbUserPass="$(pwgen -cnys -r \'\"\`\$\\\/ 64 1)"
+passExclude="\'\"\`\$\\\/\!\&"
+dbRootPass="$(pwgen -cnys -r \"$passExclude\" 256 1)"
+dbUserPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
 dbUser="$(pwgen -A0B 8 1)"
 dbName="$(pwgen -A0B 8 1)"
 
@@ -144,7 +145,7 @@ sudo apt -y install mariadb-server
 sudo systemctl enable mariadb.service
 echo -e "\ny\ny\n$dbRootPass\n$dbRootPass\ny\ny\ny\ny\n" | sudo mysql_secure_installation
 
-echo "use mysql; CREATE DATABASE ${dbName}_db; GRANT ALL ON wordpress_db.* TO '$dbUser'@'localhost' IDENTIFIED BY '$dbUserPass' WITH GRANT OPTION; FLUSH PRIVILEGES; exit" | mysql -u root -p$dbRootPass
+echo -e "use mysql;\nCREATE DATABASE ${dbName}_db;\nGRANT ALL ON wordpress_db.* TO '$dbUser'@'localhost' IDENTIFIED BY '$dbUserPass' WITH GRANT OPTION;\nFLUSH PRIVILEGES;\nexit" | mysql -u root -p$dbRootPass
 
 
 # install wordpress
@@ -170,21 +171,21 @@ sudo sed -r -i "s/^\s*define\(\s*'(DB_PASSWORD)',\s*'.*?'\s*\);\s*$/define( '\1'
 sudo sed -r -i "s/^\s*define\(\s*'(DB_HOST)',\s*'.*?'\s*\);\s*$/define( '\1', 'localhost' );/m" wp-config.php
 
 # setup auth keys
-wpPass="$(pwgen -cnysB -r \'\"\`\$\\\/ 64 1)"
+wpPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(AUTH_KEY)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
-wpPass="$(pwgen -cnysB -r \'\"\`\$\\\/ 64 1)"
+wpPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(SECURE_AUTH_KEY)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
-wpPass="$(pwgen -cnysB -r \'\"\`\$\\\/ 64 1)"
+wpPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(LOGGED_IN_KEY)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
-wpPass="$(pwgen -cnysB -r \'\"\`\$\\\/ 64 1)"
+wpPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(NONCE_KEY)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
-wpPass="$(pwgen -cnysB -r \'\"\`\$\\\/ 64 1)"
+wpPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(AUTH_SALT)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
-wpPass="$(pwgen -cnysB -r \'\"\`\$\\\/ 64 1)"
+wpPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(SECURE_AUTH_SALT)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
-wpPass="$(pwgen -cnysB -r \'\"\`\$\\\/ 64 1)"
+wpPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(LOGGED_IN_SALT)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
-wpPass="$(pwgen -cnysB -r \'\"\`\$\\\/ 64 1)"
+wpPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
 sudo sed -r -i "s/^\s*define\(\s*'(NONCE_SALT)',\s*'.*?'\s*\);\s*$/define( '\1', '$wpPass' );/m" wp-config.php
 unset wpPass
 
