@@ -17,6 +17,7 @@ function cleanup() {
   unset dbUser
   unset dbName
 
+  unset passExclude
   unset wpPass
 
   unset themeVersion
