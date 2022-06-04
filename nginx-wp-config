@@ -9,8 +9,14 @@ server {
   ssl_certificate /etc/letsencrypt/live/DOMAIN/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/DOMAIN/privkey.pem;
 
+  include /etc/letsencrypt/options-ssl-nginx.conf;
+
   access_log /var/log/nginx/SUB.access.log;
   error_log /var/log/nginx/SUB.error.log;
+
+  if ($scheme != "https") {
+    return 301 https://$host$request_uri;
+  }
 
   location / {
     try_files $uri $uri/ =404;

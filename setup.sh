@@ -108,7 +108,7 @@ sudo ln -s /snap/bin/certbot /usr/bin/certbot
 if [[ "$subdomain" == "" ]]; then
   sudo certbot certonly --nginx -m "$email" -d "$domain" -n --agree-tos
 else
-  sudo certbot certonly --nginx -m "$email" -d "$domain $subdomain" -n --agree-tos
+  sudo certbot certonly --nginx -m "$email" -d "$domain" -d "$subdomain" -n --agree-tos
 fi
 sudo certbot renew --dry-run
 
@@ -135,7 +135,7 @@ sudo apt -y install php8.1-bcmath php8.1-dba php8.1-dom php8.1-enchant php8.1-fi
 # gen rand passwords
 sudo apt -y install pwgen
 passExclude="\'\"\`\$\\\/\!\&"
-dbRootPass="$(pwgen -cnys -r \"$passExclude\" 256 1)"
+dbRootPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
 dbUserPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
 dbUser="$(pwgen -A0B 8 1)"
 dbName="$(pwgen -A0B 8 1)"
@@ -146,7 +146,7 @@ sudo apt -y install mariadb-server
 sudo systemctl enable mariadb.service
 echo -e "\ny\ny\n$dbRootPass\n$dbRootPass\ny\ny\ny\ny\n" | sudo mysql_secure_installation
 
-echo -e "use mysql;\nCREATE DATABASE ${dbName}_db;\nGRANT ALL ON wordpress_db.* TO '$dbUser'@'localhost' IDENTIFIED BY '$dbUserPass' WITH GRANT OPTION;\nFLUSH PRIVILEGES;\nexit" | mysql -u root -p$dbRootPass
+echo -e "use mysql;\nCREATE DATABASE ${dbName}_db;\nGRANT ALL ON ${dbName}_db.* TO '$dbUser'@'localhost' IDENTIFIED BY '$dbUserPass' WITH GRANT OPTION;\nFLUSH PRIVILEGES;\nexit" | mysql -u root -p$dbRootPass
 
 
 # install wordpress
