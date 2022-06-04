@@ -1,7 +1,31 @@
+#!/bin/bash
+
+function cleanup() {
+  unset email
+  unset domain
+  unset subdomain
+  unset sub
+}
+trap cleanup EXIT
+
+
 # get user input
+cd
+
+email="$(cat wp-site-ssl-info.txt | grep 'email: ')"
+email="${email//email: /}"
+
+domain="$(cat wp-site-ssl-info.txt | grep 'domain: ')"
+domain="${domain//domain: /}"
+
+echo "" > wp-site-ssl-info.txt
+
 if [[ "$email" == "" ]]; then
   echo 'Enter Admin Email'
   read -p "Email: " email
+  if [[ "$email" != "" ]]; then
+    echo "email: $email" >> wp-site-ssl-info.txt
+  fi
 fi
 
 if [[ "$email" == "" && "$domain" == "" ]]; then
@@ -11,6 +35,9 @@ fi
 if [[ "$domain" == "" ]]; then
   echo 'Enter Domain (Do Not include "www" unless using a different subdomain)'
   read -p "Domain: " domain
+  if [[ "$domain" != "" ]]; then
+    echo "domain: $domain" >> wp-site-ssl-info.txt
+  fi
 fi
 
 if [[ "$domain" =~ ^[\w_-]+\.[\w_-]+$ ]]; then
@@ -41,7 +68,6 @@ sudo service nginx restart
 
 # finished msg
 cd
-
 echo "All Done!"
 echo
 
