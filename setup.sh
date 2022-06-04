@@ -82,21 +82,20 @@ echo "" > wp-site-ssl-info.txt
 if [[ "$email" == "" ]]; then
   echo 'Enter Admin Email'
   read -p "Email: " email
-  if [[ "$email" != "" ]]; then
-    echo "email: $email" >> wp-site-ssl-info.txt
-  fi
+  echo
 fi
 
-if [[ "$email" == "" && "$domain" == "" ]]; then
-  echo
+if [[ "$email" != "" ]]; then
+  echo "email: $email" >> wp-site-ssl-info.txt
 fi
 
 if [[ "$domain" == "" ]]; then
   echo 'Enter Domain (Do Not include "www" unless using a different subdomain)'
   read -p "Domain: " domain
-  if [[ "$domain" != "" ]]; then
-    echo "domain: $domain" >> wp-site-ssl-info.txt
-  fi
+fi
+
+if [[ "$domain" != "" ]]; then
+  echo "domain: $domain" >> wp-site-ssl-info.txt
 fi
 
 if [[ "$domain" =~ ^[\w_-]+\.[\w_-]+$ ]]; then
@@ -213,6 +212,7 @@ sudo sed -r -i "s/^\s*define\(\s*'(NONCE_SALT)',\s*'.*?'\s*\);\s*$/define( '\1',
 unset wpPass
 
 
+# install wordpress plugins
 cd wp-content/plugins
 
 function installPlugin() {

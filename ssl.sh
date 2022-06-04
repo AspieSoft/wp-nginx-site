@@ -18,26 +18,23 @@ email="${email//email: /}"
 domain="$(cat wp-site-ssl-info.txt | grep 'domain: ')"
 domain="${domain//domain: /}"
 
-echo "" > wp-site-ssl-info.txt
-
 if [[ "$email" == "" ]]; then
   echo 'Enter Admin Email'
   read -p "Email: " email
-  if [[ "$email" != "" ]]; then
-    echo "email: $email" >> wp-site-ssl-info.txt
-  fi
+  echo
 fi
 
-if [[ "$email" == "" && "$domain" == "" ]]; then
-  echo
+if [[ "$email" != "" ]]; then
+  echo "email: $email" >> wp-site-ssl-info.txt
 fi
 
 if [[ "$domain" == "" ]]; then
   echo 'Enter Domain (Do Not include "www" unless using a different subdomain)'
   read -p "Domain: " domain
-  if [[ "$domain" != "" ]]; then
-    echo "domain: $domain" >> wp-site-ssl-info.txt
-  fi
+fi
+
+if [[ "$domain" != "" ]]; then
+  echo "domain: $domain" >> wp-site-ssl-info.txt
 fi
 
 if [[ "$domain" =~ ^[\w_-]+\.[\w_-]+$ ]]; then
@@ -46,6 +43,14 @@ if [[ "$domain" =~ ^[\w_-]+\.[\w_-]+$ ]]; then
 else
   sub=${domain%%.*}
 fi
+
+
+# fix nginx (disable ssl)
+cd /etc/nginx/sites-available
+sudo sed -r -i "s/(listen\s*443)/#\1/" default
+sudo sed -r -i "s/(ssl_certificate)/#\1/" default
+sudo sed -r -i "s|(include\s*/etc/letsencrypt)|#\1|" default
+sudo service nginx restart
 
 
 # install certbot
