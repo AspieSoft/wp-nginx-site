@@ -7,8 +7,6 @@ function cleanup() {
   unset installPluginOther
   unset installThemeNeve
 
-  unset email
-  unset domain
   unset subdomain
   unset sub
 
