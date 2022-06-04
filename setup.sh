@@ -213,8 +213,8 @@ unset wpPass
 
 
 # install wordpress plugins
-cd wp-content/plugins
 
+cd wp-content/plugins
 function installPlugin() {
   echo "Installing Plugin $1..."
   sudo mkdir "$1" &>/dev/null

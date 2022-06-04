@@ -57,7 +57,7 @@ installThemeNeve=$(ynInput "Install Neve Theme" "y")
 
 
 # install wordpress plugins
-cd wp-content/plugins
+cd /var/www/html/wp-content/plugins
 
 function installPlugin() {
   echo "Installing Plugin $1..."
