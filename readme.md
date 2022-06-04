@@ -8,7 +8,7 @@ Optionally auto install some recommended wordpress plugins.
 
 This module will also install a [modified version of wp-migration](https://github.com/d0n601/All-In-One-WP-Migration-With-Import.git) from github.
 
-> Note: If Using CloudFlare, You May Need To Do The Following
+> Note: If Using CloudFlare, You May Need To Temporarily Set These Options
 >
 > - Under **SSL/TLS > Origin Server**
 >   - Enable **Authenticated Origin Pulls**
