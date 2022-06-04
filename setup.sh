@@ -238,9 +238,12 @@ if [[ "$installPluginOther" == "true" ]]; then
   installPlugin "aspiesoft-auto-embed"
 
   echo "Installing Plugin wp-stateless..."
+  sudo mkdir wp-stateless &>/dev/null
+  cd wp-stateless
   sudo wget https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/wp-stateless.zip &>/dev/null
   sudo unzip wp-stateless.zip &>/dev/null
   sudo rm -f wp-stateless.zip &>/dev/null
+  cd ..
   echo "Finished Installing Plugin wp-stateless"
 fi
 
@@ -257,14 +260,19 @@ if [[ "$installThemeNeve" == "true" ]]; then
   echo "Finished Installing Theme neve"
 
   echo "Installing Plugin css-modifications-for-neve..."
+  sudo mkdir css-modifications-for-neve &>/dev/null
+  cd css-modifications-for-neve
   sudo wget https://raw.githubusercontent.com/AspieSoft/wp-css-modifications-for-neve/master/css-modifications-for-neve.zip &>/dev/null
   sudo unzip css-modifications-for-neve.zip &>/dev/null
   sudo rm -f css-modifications-for-neve.zip &>/dev/null
+  cd ..
   echo "Finished Installing Plugin css-modifications-for-neve"
 fi
 
 
 # finished msg
+cd
+
 echo "All Done!"
 echo
 

@@ -40,6 +40,8 @@ sudo service nginx restart
 
 
 # finished msg
+cd
+
 echo "All Done!"
 echo
 
