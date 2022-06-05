@@ -1,65 +1,14 @@
 #!/bin/bash
 
 function cleanup() {
-  unset installPluginEssentials
-  unset installPluginDeveloper
-  unset installPluginBeaverBuilder
-  unset installPluginOther
-  unset installThemeNeve
-
   unset email
   unset domain
+  unset port
   unset subdomain
   unset sub
-
-  unset dbRootPass
-  unset dbUserPass
-  unset dbUser
-  unset dbName
-
-  unset passExclude
-  unset wpPass
-
-  unset themeVersion
-
-  unset -f ynInput
-  unset -f installPlugin
 }
 trap cleanup EXIT
 
-
-function ynInput() {
-
-  local optY="y"
-  local optN="n"
-
-  if [ "$2" = "y" -o "$2" = "Y" ] ; then
-    optY="Y"
-  elif [ "$2" = "n" -o "$2" = "N" ] ; then
-    optN="N"
-  fi
-
-  local input=""
-  read -n1 -p "$1 ($optY/$optN)? " input ; echo >&2
-
-  if [ "$input" = "y" -o "$input" = "Y" ] ; then
-    echo "true"
-  elif [ "$input" = "n" -o "$input" = "N" ] ; then
-    echo "false"
-  else
-    if [ "$2" = "y" -o "$2" = "Y" ] ; then
-      echo "true"
-    elif [ "$2" = "n" -o "$2" = "N" ] ; then
-      echo "false"
-    else
-      echo ynInput "$1" "$2"
-    fi
-  fi
-
-  unset input
-  unset optY
-  unset optN
-}
 
 cd
 
