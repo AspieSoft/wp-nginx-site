@@ -39,3 +39,11 @@ You can easily install the reccommended plugins any time you want.
 ```shell script
 bash <(curl -s https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/plugins.sh)
 ```
+
+## Setup Node.js Server Instead Of WordPress
+
+You can easily install the reccommended plugins any time you want.
+
+```shell script
+bash <(curl -s https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/node.js/setup.sh)
+```

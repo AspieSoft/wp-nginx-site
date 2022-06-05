@@ -138,8 +138,13 @@ sudo certbot renew --dry-run
 cd /etc/nginx/sites-available
 sudo wget -O default https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/nginx-wp-config
 
-sudo sed -r -i "s/DOMAIN/$domain/" default
-sudo sed -r -i "s/SUB/$sub/" default
+if [[ "$subdomain" == "" ]]; then
+  sudo sed -r -i "s/LIST_DOMAINS/$domain/" default
+else
+  sudo sed -r -i "s/LIST_DOMAINS/$domain $subdomain/" default
+fi
+sudo sed -r -i "s/BASIC_DOMAIN/$domain/" default
+sudo sed -r -i "s/SUB_DOMAIN/$sub/" default
 
 sudo service nginx restart
 
