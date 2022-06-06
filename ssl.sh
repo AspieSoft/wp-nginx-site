@@ -5,51 +5,21 @@ function cleanup() {
   unset domain
   unset subdomain
   unset sub
+  unset rDomain
+  unset rSub
 }
 trap cleanup EXIT
 
 
 # get user input
-cd
-
-email="$(cat wp-site-ssl-info.txt | grep 'email: ')"
-email="${email//email: /}"
-
-domain="$(cat wp-site-ssl-info.txt | grep 'domain: ')"
-domain="${domain//domain: /}"
-
-if [[ "$email" == "" ]]; then
-  echo 'Enter Admin Email'
-  read -p "Email: " email
-  echo
-fi
-
-if [[ "$email" != "" ]]; then
-  echo "email: $email" >> wp-site-ssl-info.txt
-fi
-
-if [[ "$domain" == "" ]]; then
-  echo 'Enter Domain (Do Not include "www" unless using a different subdomain)'
-  read -p "Domain: " domain
-fi
-
-if [[ "$domain" != "" ]]; then
-  echo "domain: $domain" >> wp-site-ssl-info.txt
-fi
-
-if [[ "$domain" =~ ^[\w_-]+\.[\w_-]+$ ]]; then
-  subdomain="www.$domain"
-  sub="www"
-else
-  sub=${domain%%.*}
-fi
+source <(curl -s https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/bin/input.sh "$1" "$2")
 
 
 # fix nginx (disable ssl)
 cd /etc/nginx/sites-available
-sudo sed -r -i "s/(listen\s*443)/#\1/" default
-sudo sed -r -i "s/(ssl_certificate)/#\1/" default
-sudo sed -r -i "s|(include\s*/etc/letsencrypt)|#\1|" default
+sudo sed -r -i "s/(listen\s*443)/#\1/" "$rSub.$rDomain"
+sudo sed -r -i "s/(ssl_certificate)/#\1/" "$rSub.$rDomain"
+sudo sed -r -i "s|(include\s*/etc/letsencrypt)|#\1|" "$rSub.$rDomain"
 sudo service nginx restart
 
 
@@ -63,15 +33,17 @@ sudo certbot renew --dry-run
 
 # config nginx
 cd /etc/nginx/sites-available
-sudo wget -O default https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/nginx-wp-config
+sudo wget -O "$rSub.$rDomain" https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/nginx-wp-config
 
 if [[ "$subdomain" == "" ]]; then
-  sudo sed -r -i "s/LIST_DOMAINS/$domain/" default
+  sudo sed -r -i "s/LIST_DOMAINS/$domain/" "$rSub.$rDomain"
 else
-  sudo sed -r -i "s/LIST_DOMAINS/$domain $subdomain/" default
+  sudo sed -r -i "s/LIST_DOMAINS/$domain $subdomain/" "$rSub.$rDomain"
 fi
-sudo sed -r -i "s/BASIC_DOMAIN/$domain/" default
-sudo sed -r -i "s/SUB_DOMAIN/$sub/" default
+sudo sed -r -i "s/BASIC_DOMAIN/$domain/" "$rSub.$rDomain"
+sudo sed -r -i "s/SUB_DOMAIN/$subdomain/" "$rSub.$rDomain"
+
+sudo ln -s "/etc/nginx/sites-available/$rSub.$rDomain" "/etc/nginx/sites-enabled/$rSub.$rDomain"
 
 sudo service nginx restart
 

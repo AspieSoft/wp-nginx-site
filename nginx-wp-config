@@ -2,7 +2,7 @@ server {
   listen 80;
   listen 443 ssl;
 
-  root /var/www/html;
+  root /var/BASIC_DOMAIN/SUBPART_DOMAIN;
   index index.php index.html;
   server_name LIST_DOMAINS;
 
