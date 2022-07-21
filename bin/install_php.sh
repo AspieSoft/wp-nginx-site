@@ -11,16 +11,12 @@ sudo apt -y install php8.1-bcmath php8.1-dba php8.1-dom php8.1-enchant php8.1-fi
 
 # gen rand passwords
 sudo apt -y install pwgen
-passExclude="\'\"\`\$\\\/\!\&"
-dbUserPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
-dbUser="$(pwgen -A0B 8 1)"
-dbName="$(pwgen -A0B 8 1)"
 
-dbRootPass=$(sudo head -n 1 /var/dp_pass) &>/dev/null
+dbRootPass=$(sudo head -n 1 /var/db_pass) &>/dev/null
 if [[ "$dbRootPass" == "" ]]; then
   dbRootPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
-  echo "$dbRootPass" | sudo tee -a /var/dp_pass
-  sudo chmod 600 /var/dp_pass
+  echo "$dbRootPass" | sudo tee -a /var/db_pass
+  sudo chmod 600 /var/db_pass
 fi
 
 # install database

@@ -63,6 +63,11 @@ sudo service nginx restart
 
 
 # setup database
+passExclude="\'\"\`\$\\\/\!\&"
+dbUserPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
+dbUser="$(pwgen -A0B 8 1)"
+dbName="$(pwgen -A0B 8 1)"
+
 dbRootPass=$(sudo head -n 1 /var/dp_pass) &>/dev/null
 
 db_name=${dbName}_db_${rSub//\./_}_${rDomain//\./_}

@@ -37,7 +37,7 @@ sudo certbot renew --dry-run
 
 # config nginx
 cd /etc/nginx/sites-available
-sudo wget -O default https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/nginx-wp-config
+sudo wget -O default https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/node.js/nginx-node-config
 
 if [[ "$subdomain" == "" ]]; then
   sudo sed -r -i "s/LIST_DOMAINS/$domain/" default
