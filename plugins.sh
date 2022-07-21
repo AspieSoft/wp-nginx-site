@@ -7,6 +7,13 @@ function cleanup() {
   unset installPluginOther
   unset installThemeNeve
 
+  unset email
+  unset domain
+  unset subdomain
+  unset sub
+  unset rDomain
+  unset rSub
+
   unset themeVersion
 
   unset -f ynInput
@@ -14,50 +21,15 @@ function cleanup() {
 }
 trap cleanup EXIT
 
-function ynInput() {
-
-  local optY="y"
-  local optN="n"
-
-  if [ "$2" = "y" -o "$2" = "Y" ] ; then
-    optY="Y"
-  elif [ "$2" = "n" -o "$2" = "N" ] ; then
-    optN="N"
-  fi
-
-  local input=""
-  read -n1 -p "$1 ($optY/$optN)? " input ; echo >&2
-
-  if [ "$input" = "y" -o "$input" = "Y" ] ; then
-    echo "true"
-  elif [ "$input" = "n" -o "$input" = "N" ] ; then
-    echo "false"
-  else
-    if [ "$2" = "y" -o "$2" = "Y" ] ; then
-      echo "true"
-    elif [ "$2" = "n" -o "$2" = "N" ] ; then
-      echo "false"
-    else
-      echo ynInput "$1" "$2"
-    fi
-  fi
-
-  unset input
-  unset optY
-  unset optN
-}
-
 
 # get user input
-installPluginEssentials=$(ynInput "Install Essential Plugins" "y")
-installPluginDeveloper=$(ynInput "Install Developer Plugins" "y")
-installPluginBeaverBuilder=$(ynInput "Install Beaver Builder Plugin" "y")
-installPluginOther=$(ynInput "Install Other Plugins" "y")
-installThemeNeve=$(ynInput "Install Neve Theme" "y")
+source <(curl -s https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/bin/input_plugins.sh "$3" "$4" "$5" "$6" "$7")
+source <(curl -s https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/bin/input.sh "$1" "$2")
 
 
 # install wordpress plugins
-cd /var/www/html/wp-content/plugins
+#cd /var/www/html/wp-content/plugins
+cd "/var/$rDomain/$rSub/wp-content/plugins"
 
 function installPlugin() {
   echo "Installing Plugin $1..."
@@ -138,8 +110,8 @@ if [[ "$installThemeNeve" == "true" ]]; then
   echo "Finished Installing Plugin css-modifications-for-neve"
 fi
 
-sudo chown -R www-data:www-data /var/www/html
-sudo chmod -R 755 /var/www/html
+sudo chown -R www-data:www-data "/var/$rDomain/$rSub"
+sudo chmod -R 755 "/var/$rDomain/$rSub"
 
 
 # finished msg

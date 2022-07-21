@@ -3,81 +3,29 @@
 function cleanup() {
   unset email
   unset domain
-  unset port
   unset subdomain
   unset sub
+  unset rDomain
+  unset rSub
+  unset port
 }
 trap cleanup EXIT
 
 
-cd
+# get user input
+source <(curl -s https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/bin/input.sh "$1" "$2")
 
-email="$(cat wp-site-ssl-info.txt | grep 'email: ')"
-email="${email//email: /}"
-
-domain="$(cat wp-site-ssl-info.txt | grep 'domain: ')"
-domain="${domain//domain: /}"
-
-port="$(cat wp-site-ssl-info.txt | grep 'domain: ')"
-port="${port//port: /}"
-
-echo "" > wp-site-ssl-info.txt
-
-if [[ "$email" == "" ]]; then
-  echo 'Enter Admin Email'
-  read -p "Email: " email
-  echo
-fi
-
-if [[ "$email" != "" ]]; then
-  echo "email: $email" >> wp-site-ssl-info.txt
-fi
-
-if [[ "$domain" == "" ]]; then
-  echo 'Enter Domain (Do Not include "www" unless using a different subdomain)'
-  read -p "Domain: " domain
-fi
-
-if [[ "$domain" != "" ]]; then
-  echo "domain: $domain" >> wp-site-ssl-info.txt
-fi
-
-if [[ "$domain" =~ ^[\w_-]+\.[\w_-]+$ ]]; then
-  subdomain="www.$domain"
-  sub="www"
-else
-  sub=${domain%%.*}
-fi
+port = "$3"
 
 if [[ "$port" == "" ]]; then
   echo 'Enter Port Number For Node.js Server (This will sit under a proxy)'
   read -p "port: " port
 fi
 
-if [[ "$port" != "" ]]; then
-  echo "port: $port" >> wp-site-ssl-info.txt
-fi
 
+# install basics
+source <(curl -s https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/bin/install_basics.sh)
 
-# update
-sudo apt update
-sudo apt -y upgrade
-
-# install zip
-sudo apt -y install zip unzip gzip
-
-# install git
-sudo apt -y install git wget curl
-
-# install nginx
-sudo apt -y install nginx
-
-
-# install certbot
-sudo apt -y install snapd
-sudo snap install core; sudo snap refresh core
-sudo snap install --classic certbot
-sudo ln -s /snap/bin/certbot /usr/bin/certbot
 
 if [[ "$subdomain" == "" ]]; then
   sudo certbot certonly --nginx -m "$email" -d "$domain" -n --agree-tos
@@ -89,7 +37,7 @@ sudo certbot renew --dry-run
 
 # config nginx
 cd /etc/nginx/sites-available
-sudo wget -O default https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/nginx-wp-config
+sudo wget -O default https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/node.js/nginx-node-config
 
 if [[ "$subdomain" == "" ]]; then
   sudo sed -r -i "s/LIST_DOMAINS/$domain/" default
@@ -97,20 +45,14 @@ else
   sudo sed -r -i "s/LIST_DOMAINS/$domain $subdomain/" default
 fi
 sudo sed -r -i "s/BASIC_DOMAIN/$domain/" default
-sudo sed -r -i "s/SUB_DOMAIN/$sub/" default
+sudo sed -r -i "s/SUB_DOMAIN/$subdomain/" default
 sudo sed -r -i "s/NODE_PORT/$port/" default
 
 sudo service nginx restart
 
 
-# install nodejs
-sudo apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
-curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-sudo apt -y install nodejs
-sudo apt -y install gcc g++ make
-
-#sudo apt -y install npm
-sudo npm install -g npm
+# install node
+source <(curl -s https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/bin/install_node.sh)
 
 
 # finished msg

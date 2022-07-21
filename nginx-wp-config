@@ -2,7 +2,7 @@ server {
   listen 80;
   listen 443 ssl;
 
-  root /var/www/html;
+  root /var/www/BASIC_DOMAIN/SUBPART_DOMAIN;
   index index.php index.html;
   server_name LIST_DOMAINS;
 
@@ -19,11 +19,13 @@ server {
   }
 
   location / {
-    try_files $uri $uri/ =404;
+    #try_files $uri $uri/ =404;
+    try_files $uri $uri/ /index.php?$args;
   }
 
   location ~ \.php$ {
     include snippets/fastcgi-php.conf;
+    fastcgi_intercept_errors on;
     fastcgi_pass unix:/run/php/php8.1-fpm.sock;
   }
 

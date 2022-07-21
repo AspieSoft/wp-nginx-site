@@ -35,10 +35,6 @@ trap cleanup EXIT
 source <(curl -s https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/bin/input_plugins.sh "$3" "$4" "$5" "$6" "$7")
 source <(curl -s https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/bin/input.sh "$1" "$2")
 
-# install basics
-source <(curl -s https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/bin/install_basics.sh)
-
-
 if [[ "$subdomain" == "" ]]; then
   sudo certbot certonly --nginx -m "$email" -d "$domain" -n --agree-tos
 else
@@ -58,7 +54,7 @@ else
   sudo sed -r -i "s/LIST_DOMAINS/$domain $subdomain/" "$rSub.$rDomain"
 fi
 sudo sed -r -i "s/BASIC_DOMAIN/$domain/" "$rSub.$rDomain"
-sudo sed -r -i "s/SUB_DOMAIN/${subdomain//\./_}/" "$rSub.$rDomain"
+sudo sed -r -i "s/SUB_DOMAIN/$subdomain/" "$rSub.$rDomain"
 sudo sed -r -i "s/SUBPART_DOMAIN/$sub/" "$rSub.$rDomain"
 
 sudo ln -s "/etc/nginx/sites-available/$rSub.$rDomain" "/etc/nginx/sites-enabled/$rSub.$rDomain"
@@ -66,28 +62,22 @@ sudo ln -s "/etc/nginx/sites-available/$rSub.$rDomain" "/etc/nginx/sites-enabled
 sudo service nginx restart
 
 
-# install php
-source <(curl -s https://raw.githubusercontent.com/AspieSoft/wp-nginx-site/master/bin/install_php.sh)
-
 # setup database
 passExclude="\'\"\`\$\\\/\!\&"
 dbUserPass="$(pwgen -cnys -r \"$passExclude\" 64 1)"
 dbUser="$(pwgen -A0B 8 1)"
 dbName="$(pwgen -A0B 8 1)"
 
+dbRootPass=$(sudo head -n 1 /var/dp_pass) &>/dev/null
+
 db_name=${dbName}_db_${rSub//\./_}_${rDomain//\./_}
 echo -e "use mysql;\nCREATE DATABASE ${db_name};\nGRANT ALL ON ${db_name}.* TO '$dbUser'@'localhost' IDENTIFIED BY '$dbUserPass' WITH GRANT OPTION;\nFLUSH PRIVILEGES;\nexit" | mysql -u root -p$dbRootPass
 
 
 # install wordpress
-sudo rm -rf /var/www/html/index.nginx-debian.html
+cd "/var/$rDomain/$rSub"
 
-#cd /var/www/html
-sudo mkdir "/var/www/$rDomain"
-sudo mkdir "/var/www/$rDomain/$rSub"
-cd "/var/www/$rDomain/$rSub"
-
-# sudo rm -f index.nginx-debian.html
+sudo rm -f index.nginx-debian.html
 sudo wget https://wordpress.org/latest.zip
 sudo unzip latest.zip
 sudo cp -r wordpress/* .
